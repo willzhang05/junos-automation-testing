@@ -8,18 +8,25 @@ from lxml import etree
 
 
 def main():
-    print("hi")
-    hostname = "vsrx2" #input("Device hostname: ")
-    username = "root" #input("Device username: ")
+    if len(sys.argv) == 3:
+        hostname = sys.argv[1]
+        username = sys.argv[2]
+    if len(sys.argv) == 2:
+        hostname = sys.argv[1]
+        username = "root"
+    if len(sys.argv) == 1:
+        hostname = input("Device hostname: ")
+        username = input("Device username: ")
+
     password = getpass("Device password: ")
     dev = Device(host=hostname, user=username, passwd=password)
     try:
         dev.open()
     except ConnectError as err:
-        print ("Cannot connect to device: {0}".format(err))
+        print("Cannot connect to device: {0}".format(err))
         sys.exit(1)
     except Exception as err:
-        print (err)
+        print(err)
         sys.exit(1)
     #output = dev.display_xml_rpc('show isis adjacency')
     output = dev.rpc.get_route_information()
@@ -39,6 +46,7 @@ def main():
 
     print(routes)
     dev.close()
+
 
 if __name__ == '__main__':
     main()
