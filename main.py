@@ -20,6 +20,7 @@ def main():
 
     password = getpass("Device password: ")
     dev = Device(host=hostname, user=username, passwd=password)
+
     try:
         dev.open()
     except ConnectError as err:
@@ -28,11 +29,12 @@ def main():
     except Exception as err:
         print(err)
         sys.exit(1)
-    #output = dev.display_xml_rpc('show isis adjacency')
+
     output = dev.rpc.get_route_information()
     find = etree.XPath('//rt')
     matches = find(output)
     routes = []
+
     for m in matches:
         entry = dict()
         type_find = etree.XPath('rt-entry//protocol-name')
