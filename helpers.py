@@ -6,6 +6,24 @@ from jnpr.junos import Device
 from jnpr.junos.exception import ConnectError
 from lxml import etree
 
+def route_advert_bgp(tree, addr, table=None):
+    if table is None:
+        rt_tab_find = etree.XPath('//route-table/table-name/..')
+    else:
+        rt_tab_find = etree.XPath('//route-table/*[table-name=' + table + ']/..')
+
+    rt_table = rt_tab_find(tree)
+
+    print(rt_table)
+    print(etree.tostring(rt_table[0]))
+
+
+    return
+
+def route_recv_bgp():
+
+    return
+
 
 def main():
     if len(sys.argv) > 1:
@@ -18,6 +36,8 @@ def main():
         print("Invalid filepath.")
         return 1
     tree = etree.parse(filepath)
+    route_advert_bgp(tree, "140.222.238.201", table="inet.0")
+
     '''
     find = etree.XPath('//rt')
     matches = find(output)
@@ -36,7 +56,6 @@ def main():
 
     print(routes)
     '''
-    print(etree.tostring(tree.getroot()))
     return 0
 
 
